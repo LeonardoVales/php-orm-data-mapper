@@ -1,0 +1,17 @@
+{
+    "name": "vales/data-mapper-orm",
+    "description": "A data mapper ORM",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Leonardo Vales",
+            "email": "leohenrique.vales@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Vales\\DataMapperOrm\\": "src"
+        }
+    }
+}
