@@ -6,6 +6,9 @@ use Vales\DataMapperOrm\Drivers\DriverInterface;
 // use Vales\DataMapperOrm\Entities\Entity;
 use Vales\DataMapperOrm\Entities\EntityInterface;
 use Vales\DataMapperOrm\QueryBuilder\Select;
+use Vales\DataMapperOrm\QueryBuilder\Insert;
+use Vales\DataMapperOrm\QueryBuilder\Delete;
+use Vales\DataMapperOrm\QueryBuilder\Update;
 use App\Entities\Users as Entity;
 
 class Repository
@@ -41,7 +44,11 @@ class Repository
 
     public function insert(EntityInterface $entity): EntityInterface
     {
-
+        $table = $entity->getTable();        
+        $this->driver->setQueryBuilder(new Insert($table, $entity->getAll()));
+        $this->driver->execute();
+        
+        return $this->first($this->driver->lastInsertId());
     }
 
     public function update(EntityInterface $entity): EntityInterface
@@ -87,7 +94,7 @@ class Repository
 
         $entities = [];
         foreach ($data as $row) {
-            $entities[] = $entity->setAll($row);
+            $entities[] = new $this->entity($row);
         }
 
         return $entities;

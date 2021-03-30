@@ -14,7 +14,7 @@ interface DriverInterface
 
     public function execute();
 
-    public function lastInsertedId();
+    public function lastInsertId();
 
     public function first();
 

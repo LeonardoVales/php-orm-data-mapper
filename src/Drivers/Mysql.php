@@ -53,9 +53,9 @@ class Mysql implements DriverInterface
         return $results;
     }
 
-    public function lastInsertedId() 
+    public function lastInsertId() 
     {
-        return $this->pdo->lastInsertedId();
+        return $this->pdo->lastInsertId();
     }
 
     public function first() 
