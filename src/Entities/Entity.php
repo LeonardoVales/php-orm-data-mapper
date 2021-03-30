@@ -41,9 +41,20 @@ class Entity implements EntityInterface
         $method = $this->methodName('get', $name);
 
         if (method_exists($this, $method)) {
-            return $this->$method;
+            return $this->$method();
         }
-        return $this->data['id'];
+        return $this->data[$name];
+    }
+
+    public function __set($name, $value) 
+    {
+        $method = $this->methodName('set', $name);
+
+        if (method_exists($this, $method)) {
+            return $this->$method($value);
+        }
+
+        $this->data[$name] = $value;
     }
 
     public function methodName($prefix, $name)

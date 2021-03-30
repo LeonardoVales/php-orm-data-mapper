@@ -53,7 +53,15 @@ class Repository
 
     public function update(EntityInterface $entity): EntityInterface
     {
+        $table = $entity->getTable();
+        $condition = [
+            ['id', $entity->id]
+        ];
 
+        $this->driver->setQueryBuilder(new Update($table, $entity->getAll(), $condition));
+        $this->driver->execute();
+        
+        return $entity;
     }
 
     public function delete(EntityInterface $entity): EntityInterface

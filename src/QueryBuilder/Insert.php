@@ -2,12 +2,8 @@
 
 namespace Vales\DataMapperOrm\QueryBuilder;
 
-use Vales\DataMapperOrm\QueryBuilder\Filters\Where;
-
 class Insert implements QueryBuilderInterface
 {
-
-    use Where;
 
     private $query;
     protected $values = [];
