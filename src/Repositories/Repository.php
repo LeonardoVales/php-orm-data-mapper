@@ -3,9 +3,10 @@
 namespace Vales\DataMapperOrm\Repositories;
 
 use Vales\DataMapperOrm\Drivers\DriverInterface;
-use Vales\DataMapperOrm\Entities\Entity;
+// use Vales\DataMapperOrm\Entities\Entity;
 use Vales\DataMapperOrm\Entities\EntityInterface;
 use Vales\DataMapperOrm\QueryBuilder\Select;
+use App\Entities\Users as Entity;
 
 class Repository
 {
@@ -18,12 +19,24 @@ class Repository
 
     public function setEntity(string $entity)
     {
+        $reflection = new \ReflectionClass($entity);
 
+        if (!$reflection->implementsInterface(EntityInterface::class)) {
+            throw new \InvalidArgumentException('{$entity} not implements interface' . EntityInterface::class);
+        }
+
+        $this->entity = $entity;
     }
 
     public function getEntity(): EntityInterface
     {
+        if (is_null($this->entity)) {
+            throw new \Exception('entity is required');
+        }
 
+        if (is_string($this->entity)) {
+            return new $this->entity;
+        }
     }
 
     public function insert(EntityInterface $entity): EntityInterface
@@ -43,22 +56,38 @@ class Repository
 
     public function first($id = null): ?EntityInterface
     {
-        $this->driver->setQueryBuilder(new Select('users'));
+        $entity = $this->getEntity();
+        $table = $entity->getTable();
+
+        $conditions = [];
+
+        if (!is_null($id)) {
+            $conditions[] = ['id', $id];
+        }
+
+        $this->driver->setQueryBuilder(new Select($table, $conditions));
         $this->driver->execute();
         $data = $this->driver->first();
 
-        return new Entity($data);
+        if (!$data) {
+            return null;
+        }
+
+        return $entity->setAll($data);
     }
 
-    public function all(array $condition = []): EntityInterface
+    public function all(array $conditions = []): array
     {
-        $this->driver->setQueryBuilder(new Select('users'));
+        $entity = $this->getEntity();
+        $table = $entity->getTable();
+
+        $this->driver->setQueryBuilder(new Select($table, $conditions));
         $this->driver->execute();
         $data = $this->driver->all();
 
         $entities = [];
         foreach ($data as $row) {
-            $entities[] = new Entity($row);
+            $entities[] = $entity->setAll($row);
         }
 
         return $entities;

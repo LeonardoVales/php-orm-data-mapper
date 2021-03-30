@@ -2,10 +2,12 @@
 
 require __DIR__.'/vendor/autoload.php';
 
-new Vales\DataMapperOrm\DataMapper;
+use Vales\DataMapperOrm\QueryBuilder\Select;
+use Vales\DataMapperOrm\Drivers\Mysql;
+use Vales\DataMapperOrm\Repositories\Repository;
+use App\Entities\Users;
 
-$select = new Vales\DataMapperOrm\QueryBuilder\Select('users');
-$conn = new Vales\DataMapperOrm\Drivers\Mysql;
+$conn = new Mysql;
 
 $conn->connect([
     'server' => 'localhost',
@@ -14,9 +16,12 @@ $conn->connect([
     'pass' => '123456'
 ]);
 
-$conn->setQueryBuilder($select);
-$conn->execute();
-$users = $conn->all();
+$repository = new Repository($conn);
+$repository->setEntity(Users::class);
+
+$users = $repository->first(1);
 
 var_dump($users);
+
+
 

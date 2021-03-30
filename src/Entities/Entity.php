@@ -7,14 +7,15 @@ class Entity implements EntityInterface
     protected $data;
     protected $table;
 
-    public function __construct()
+    public function __construct(array $data = [])
     {
-        
+        $this->data = $data;
     }
 
     public function setAll(array $data)
     {
         $this->data = $data;
+        return $this; //retorna a própria classe
     }
 
     public function getAll(): array
@@ -24,6 +25,14 @@ class Entity implements EntityInterface
 
     public function getTable(): string
     {
-        return 'users';
+        if (!empty($this->table)) {
+            return $this->table;
+        }
+
+        $table = get_class($this); 
+        $table = explode('\\', $table);
+        $table = array_pop($table);
+
+        return strtolower($table);
     }
 }
