@@ -58,7 +58,14 @@ class Repository
 
     public function delete(EntityInterface $entity): EntityInterface
     {
-
+        $table = $entity->getTable();        
+        $condition = [
+            ['id', $entity->id]
+        ];
+        $this->driver->setQueryBuilder(new Delete($table, $condition));
+        $this->driver->execute();
+        
+        return $entity;
     }
 
     public function first($id = null): ?EntityInterface

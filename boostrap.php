@@ -19,15 +19,11 @@ $conn->connect([
 $repository = new Repository($conn);
 $repository->setEntity(Users::class);
 
-$user =new Users([
-    'name' => 'João Calvino',
-    'email' => 'test15e@gmail.com',
-    'password' => '123456'
-]);
+$user = $repository->first(4);
 
-$users = $repository->all();
+$user = $repository->delete($user);
 
-var_dump($users);
+var_dump($user);
 
 
 
