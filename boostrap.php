@@ -10,10 +10,10 @@ use App\Entities\Users;
 $conn = new Mysql;
 
 $conn->connect([
-    'server' => 'localhost',
-    'database' => 'laravel_teste',
-    'user' => 'laravel_teste',
-    'pass' => '123456'
+    'server' => '',
+    'database' => '',
+    'user' => '',
+    'pass' => ''
 ]);
 
 $repository = new Repository($conn);
